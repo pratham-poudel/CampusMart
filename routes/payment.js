@@ -6,8 +6,8 @@ const express = require('express');
 const router = express.Router();
 
 const razorpay = new Razorpay({
-  key_id: 'rzp_test_hXdPUh3IoDNxi3',
-	key_secret: '9jqZysk3YfTMebobTR3aQEaC'
+  key_id: process.env.RAZORPAY_KEY_ID,
+	key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 router.post('/create/orderId', async (req, res) => {
   const amount = req.body.amount * 100; // Convert to smallest currency unit (paise)
