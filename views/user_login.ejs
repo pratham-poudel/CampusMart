@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusMart</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<style>
+    /* General Styles */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fffaf0;
+    }
+
+    /* Header */
+    header {
+        background-color: #fefcbf;
+        border-bottom: 1px solid #faf089;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+
+    .nav-link {
+        color: black;
+        text-decoration: none;
+        padding: 8px;
+    }
+
+    .nav-link:hover {
+        color: #d69e2e;
+    }
+
+    .cart-icon {
+        font-size: 24px;
+    }
+
+    /* Hero Section */
+    .hero {
+        padding: 100px 20px;
+        text-align: center;
+        background-color: #f6e05e;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        color: black;
+        font-weight: bold;
+    }
+
+    .hero-subtitle {
+        color: rgba(0, 0, 0, 0.8);
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .buttons {
+        margin-top: 20px;
+    }
+
+    .btn-shop, .btn-learn, .btn-signup-now {
+        background-color: black;
+        color: #f6e05e;
+        padding: 10px 20px;
+        border: none;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    .btn-shop:hover, .btn-learn:hover, .btn-signup-now:hover {
+        background-color: #d69e2e;
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 2px solid black;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .btn-outline:hover {
+        background-color: #faf089;
+    }
+
+    /* Features Section */
+    .features {
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+        gap: 20px;
+    }
+
+    .feature {
+        background-color: #fefcbf;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .feature-title {
+        font-size: 1.5rem;
+        color: black;
+    }
+
+    .feature-description {
+        color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Signup Section */
+    .signup {
+        padding: 50px 20px;
+        background-color: black;
+        color: #fefcbf;
+    }
+
+    .signup-input {
+        padding: 10px;
+        width: 250px;
+        margin-right: 10px;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 20px;
+        text-align: center;
+        background-color: #fefcbf;
+    }
+
+    .footer-nav {
+        margin-top: 10px;
+    }
+
+    .footer-nav a {
+        margin-left: 10px;
+        color: black;
+    }
+
+    .footer-nav a:hover {
+        color: #d69e2e;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .mobile-menu a {
+        padding: 10px;
+        background-color: #fefcbf;
+        border-bottom: 1px solid #faf089;
+    }
+
+    .mobile-menu a:hover {
+        background-color: #faf089;
+    }
+
+    .open {
+        display: flex;
+    }
+
+</style>
+<body>
+    <div class="container">
+        <header class="sticky top-0 w-full border-b bg-yellow-100">
+            <div class="flex items-center justify-between h-16 px-4 mx-auto">
+                <div class="flex items-center space-x-4">
+                    <span class="cart-icon">🛒</span>
+                    <span class="text-2xl font-bold text-black">CampusMart</span>
+                </div>
+                <nav class="hidden md:flex space-x-4">
+                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="#">Products</a>
+                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link" href="http://localhost:3000/admin/login">Admin Center</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <a href="/auth/google"><button class="btn-outline hidden sm:flex">Log In</button></a>
+                    <button class="btn-signup hidden sm:flex">Sign Up</button>
+                    <button class="btn-menu md:hidden">☰</button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <nav class="mobile-menu" id="mobileMenu">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="/admin/dashboard">Admin Center</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="hero bg-yellow-400">
+                <div class="text-center">
+                    <h1 class="hero-title">Welcome to CampusMart</h1>
+                    <p class="hero-subtitle">Your one-stop destination for all your shopping needs</p>
+                    <div class="buttons">
+                        <button class="btn-shop">Shop Now</button>
+                        <button class="btn-learn">Learn More</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features">
+                <div class="text-center">
+                    <h2 class="section-title">Our Features</h2>
+                    <div class="features-grid">
+                        <div class="feature">
+                            <h3 class="feature-title">Wide Selection</h3>
+                            <p class="feature-description">Thousands of products to choose from</p>
+                        </div>
+                        <div class="feature">
+                            <h3 class="feature-title">Fast Delivery</h3>
+                            <p class="feature-description">Get your items delivered in no time</p>
+                        </div>
+                        <div class="feature">
+                            <h3 class="feature-title">Secure Payments</h3>
+                            <p class="feature-description">Shop with confidence using our secure payment system</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Signup Section -->
+            <section class="signup bg-black text-center">
+                <h2 class="signup-title text-yellow-400">Ready to start shopping?</h2>
+                <p class="signup-subtitle text-yellow-100">Sign up now and get 10% off your first purchase!</p>
+                <form class="signup-form">
+                    <input type="email" placeholder="Enter your email" class="signup-input">
+                    <button class="btn-signup-now">Sign Up</button>
+                </form>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer bg-yellow-100">
+            <div class="footer-content">
+                <span class="text-sm text-black/80">© 2023 CampusMart. All rights reserved.</span>
+                <nav class="footer-nav">
+                    <a href="#" class="text-sm text-black">Privacy Policy</a>
+                    <a href="#" class="text-sm text-black">Terms of Service</a>
+                    <a href="#" class="text-sm text-black">Contact Us</a>
+                </nav>
+            </div>
+        </footer>
+    </div>
+    <script>
+        // Menu toggle for mobile view
+        document.querySelector('.btn-menu').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Completed</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        #animation-container {
+            text-align: center;
+        }
+
+        #tick {
+            font-size: 100px;
+            color: green;
+            margin-bottom: 20px;
+            animation: tick-animation 1s ease-in-out forwards;
+        }
+
+        @keyframes tick-animation {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        #message {
+            font-size: 24px;
+            color: #333;
+        }
+
+        #sound {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="animation-container">
+        <div id="tick">&#10004;</div>
+        <div id="message">Your order has been completed!</div>
+        <audio id="sound" src="/path/to/success-sound.mp3" preload="auto"></audio>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sound = document.getElementById('sound');
+            sound.play();
+
+            setTimeout(() => {
+                window.location.href = '/users/tracking';
+            }, 3000); // Redirect after 3 seconds to let the animation and sound complete
+        });
+    </script>
+</body>
+
+</html>

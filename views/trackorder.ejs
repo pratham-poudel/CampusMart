@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .order-card {
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 20px;
+            animation: slideIn 0.5s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .order-status {
+            font-size: 1.2em;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .thumbnail-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .thumbnail-grid img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .price {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-card {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .thumbnail-grid img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Track Your Orders</h1>
+        <div id="order-container">
+            <% orders.forEach(order => { %>
+                <div class="order-card">
+                    <div class="order-header">
+                        <h2>Order ID: <%= order._id %></h2>
+                        <span class="order-status">Status: <%= order.status %></span>
+                    </div>
+                    <p>Placed on: <%= new Date(order.createdAt).toLocaleDateString() %></p>
+                    <div class="thumbnail-grid">
+                        <% order.products.forEach(product => { %>
+                            <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="Product Image">
+                            <span><%= product.name %></span>
+                            <span class="price">₹<%= product.price %></span>
+                        <% }) %>
+                    </div>
+                    <p class="price">Total: ₹<%= order.totalPrice %></p>
+                    <a href="/order/tracklivelocation"><button class=" bg-green-700 text-white px-4 py-2 rounded">See Live Location</button></a>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+    <script>
+        // Utility function to convert ArrayBuffer to Base64 string
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            const len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+
+        // Function to fetch updated order status from backend
+        async function fetchOrderUpdates() {
+            try {
+                const response = await fetch('/users/trackOrder');
+                const data = await response.json();
+                const orderContainer = document.getElementById('order-container');
+
+                orderContainer.innerHTML = '';
+                data.orders.forEach(order => {
+                    const orderElement = document.createElement('div');
+                    orderElement.classList.add('order-card');
+
+                    const productsHTML = order.products.map(product => {
+                        const base64String = arrayBufferToBase64(product.image.data);
+                        const imgSrc = `data:image/jpeg;base64,${base64String}`;
+                        return `
+
+                            <img src="${imgSrc}" alt="${product.name}">
+                            <span>${product.name}</span>
+                            <span class="price">₹${product.price}</span>
+                            
+                        `;
+                    }).join('');
+
+                    orderElement.innerHTML = `
+                        <div class="order-header">
+                            <h2>Order ID: ${order._id}</h2>
+                            <span class="order-status">Status: ${order.status}</span>
+                        </div>
+                        <p>Placed on: ${new Date(order.createdAt).toLocaleDateString()}</p>
+                        <div class="thumbnail-grid">
+                            ${productsHTML}
+                        </div>
+                        <p class="price">Total: ₹${order.totalPrice}</p>
+                        <a href="/order/tracklivelocation"><button class=" bg-green-700 text-white px-4 py-2 rounded">See Live Location</button></a>
+                        
+                    `;
+
+                    orderContainer.appendChild(orderElement);
+                });
+            } catch (error) {
+                console.error('Error fetching order updates:', error);
+            }
+        }
+
+        // Poll the backend for updates every 10 seconds
+        setInterval(fetchOrderUpdates, 10000);
+    </script>
+</body>
+</html>

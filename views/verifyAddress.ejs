@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/jquery-ui.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Your Profile</h1>
+        <form action="/users/verifyDetails" method="POST">
+            <input type="hidden" name="email" value="<%= user.email %>">
+
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" value="<%= user.phone || '' %>" placeholder="Enter your phone number">
+
+            <h3>Address</h3>
+
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" placeholder="Enter your state" value="<%= user.addresses[0] ? user.addresses[0].state : '' %>">
+
+            <label for="zip">Zip Code</label>
+            <input type="text" id="zip" name="zip" placeholder="Enter your zip code" value="<%= user.addresses[0] ? user.addresses[0].zip : '' %>">
+
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="Enter your city" value="<%= user.addresses[0] ? user.addresses[0].city : '' %>">
+
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" placeholder="Enter your address" value="<%= user.addresses[0] ? user.addresses[0].address : '' %>">
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#address").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: `https://api.example.com/address-suggestions?q=${request.term}`, // Replace with your API endpoint
+                        method: 'GET',
+                        success: function(data) {
+                            response(data.suggestions); // Adjust based on API response
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    $('#address').val(ui.item.value);
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

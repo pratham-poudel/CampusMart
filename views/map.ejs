@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Location</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .autocomplete-suggestions {
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            background-color: #fff;
+            position: absolute;
+            z-index: 1000;
+            width: calc(100% - 22px); /* Adjust width to match the input field */
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        .autocomplete-suggestion {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .autocomplete-suggestion:hover {
+            background-color: #f0f0f0;
+        }
+
+        #inputs {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+        <h1>Confirm Your Location</h1>
+        <div id="inputs">
+            <form method="post" action="/order/address/<%= orderid %>">
+                <div class="form-group">
+                    <label for="end">Destination (from map suggestions):</label>
+                    <input type="text" name="suggestedAddress" id="end" placeholder="Enter destination">
+                    <div id="suggestions" class="autocomplete-suggestions"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="localAddress">Local Address:</label>
+                    <input type="text" name="localAddress" id="localAddress" placeholder="Enter address in local language">
+                </div>
+                
+                <input type="hidden" name="location" id="location">
+                
+                <div class="form-group">
+                    <input type="submit" value="Confirm Location">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script>
+        const endInput = document.getElementById('end');
+        const suggestionsContainer = document.getElementById('suggestions');
+        const localAddressInput = document.getElementById('localAddress');
+        const locationInput = document.getElementById('location');
+        const geocoder = L.Control.Geocoder.nominatim();
+
+        endInput.addEventListener('input', function () {
+            const query = endInput.value;
+            if (query) {
+                geocoder.geocode(query, function (results) {
+                    suggestionsContainer.innerHTML = '';
+                    results.forEach(function (result) {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'autocomplete-suggestion';
+                        suggestionItem.innerText = result.name;
+                        suggestionItem.addEventListener('click', function () {
+                            endInput.value = result.name;
+                            locationInput.value = result.center.lat + ',' + result.center.lng;
+                            suggestionsContainer.innerHTML = ''; // Clear suggestions
+                        });
+                        suggestionsContainer.appendChild(suggestionItem);
+                    });
+                });
+            } else {
+                suggestionsContainer.innerHTML = ''; // Clear suggestions if input is empty
+            }
+        });
+    </script>
+
+</body>
+
+</html>
