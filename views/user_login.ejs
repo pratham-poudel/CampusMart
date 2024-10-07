@@ -34,27 +34,23 @@
         color: #d69e2e;
     }
 
-    .cart-icon {
-        font-size: 24px;
-    }
-
     /* Hero Section */
     .hero {
-        padding: 100px 20px;
+        padding: 80px 10px;
         text-align: center;
         background-color: #f6e05e;
     }
 
     .hero-title {
-        font-size: 3rem;
+        font-size: 2rem;
         color: black;
         font-weight: bold;
     }
 
     .hero-subtitle {
         color: rgba(0, 0, 0, 0.8);
-        font-size: 1.5rem;
-        margin-bottom: 20px;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
     }
 
     .buttons {
@@ -74,20 +70,9 @@
         background-color: #d69e2e;
     }
 
-    .btn-outline {
-        background-color: transparent;
-        border: 2px solid black;
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-
-    .btn-outline:hover {
-        background-color: #faf089;
-    }
-
     /* Features Section */
     .features {
-        padding: 50px 20px;
+        padding: 40px 10px;
         text-align: center;
     }
 
@@ -108,20 +93,17 @@
         color: black;
     }
 
-    .feature-description {
-        color: rgba(0, 0, 0, 0.8);
-    }
-
     /* Signup Section */
     .signup {
-        padding: 50px 20px;
+        padding: 50px 10px;
         background-color: black;
         color: #fefcbf;
     }
 
     .signup-input {
         padding: 10px;
-        width: 250px;
+        width: 100%;
+        max-width: 250px;
         margin-right: 10px;
     }
 
@@ -130,19 +112,6 @@
         padding: 20px;
         text-align: center;
         background-color: #fefcbf;
-    }
-
-    .footer-nav {
-        margin-top: 10px;
-    }
-
-    .footer-nav a {
-        margin-left: 10px;
-        color: black;
-    }
-
-    .footer-nav a:hover {
-        color: #d69e2e;
     }
 
     /* Mobile Menu */
@@ -165,10 +134,9 @@
     .open {
         display: flex;
     }
-
 </style>
 <body>
-    <div class="container">
+    <div class="container mx-auto">
         <header class="sticky top-0 w-full border-b bg-yellow-100">
             <div class="flex items-center justify-between h-16 px-4 mx-auto">
                 <div class="flex items-center space-x-4">
@@ -179,21 +147,21 @@
                     <a class="nav-link" href="#">Home</a>
                     <a class="nav-link" href="#">Products</a>
                     <a class="nav-link" href="#">About</a>
-                    <a class="nav-link" href="#">Contact</a>
-                    <a class="nav-link" href="http://localhost:3000/admin/login">Admin Center</a>
+                    <a class="nav-link" href="/deliverypartner/login">Delivery Partner</a>
+                    <a class="nav-link" href="/admin/login">Admin Center</a>
                 </nav>
                 <div class="flex items-center space-x-4">
                     <a href="/auth/google"><button class="btn-outline hidden sm:flex">Log In</button></a>
-                    <button class="btn-signup hidden sm:flex">Sign Up</button>
+                    <a href="/auth/google"><button class="btn-signup hidden sm:flex">Sign Up</button></a>
                     <button class="btn-menu md:hidden">☰</button>
                 </div>
             </div>
             <!-- Mobile Menu -->
             <nav class="mobile-menu" id="mobileMenu">
                 <a href="#">Home</a>
-                <a href="#">Products</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
+                <a href="/auth/google">Signup</a>
+                <a href="/auth/google">Login</a>
+                <a href="/deliverypartner/login">Delivery Partner</a>
                 <a href="/admin/dashboard">Admin Center</a>
             </nav>
         </header>
@@ -202,8 +170,8 @@
             <!-- Hero Section -->
             <section class="hero bg-yellow-400">
                 <div class="text-center">
-                    <h1 class="hero-title">Welcome to CampusMart</h1>
-                    <p class="hero-subtitle">Your one-stop destination for all your shopping needs</p>
+                    <h1 class="hero-title text-3xl md:text-5xl">Welcome to CampusMart</h1>
+                    <p class="hero-subtitle text-lg md:text-xl">Your one-stop destination for all your shopping needs</p>
                     <div class="buttons">
                         <button class="btn-shop">Shop Now</button>
                         <button class="btn-learn">Learn More</button>
@@ -214,7 +182,7 @@
             <!-- Features Section -->
             <section class="features">
                 <div class="text-center">
-                    <h2 class="section-title">Our Features</h2>
+                    <h2 class="section-title text-xl md:text-3xl">Our Features</h2>
                     <div class="features-grid">
                         <div class="feature">
                             <h3 class="feature-title">Wide Selection</h3>
@@ -234,8 +202,8 @@
 
             <!-- Signup Section -->
             <section class="signup bg-black text-center">
-                <h2 class="signup-title text-yellow-400">Ready to start shopping?</h2>
-                <p class="signup-subtitle text-yellow-100">Sign up now and get 10% off your first purchase!</p>
+                <h2 class="signup-title text-yellow-400 text-2xl md:text-4xl">Ready to start shopping?</h2>
+                <p class="signup-subtitle text-yellow-100 text-lg">Sign up now and get 10% off your first purchase!</p>
                 <form class="signup-form">
                     <input type="email" placeholder="Enter your email" class="signup-input">
                     <button class="btn-signup-now">Sign Up</button>

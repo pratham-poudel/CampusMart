@@ -55,40 +55,29 @@
             <div class="bg-white p-4 rounded-lg shadow mb-4">
                 <h2 class="text-lg font-semibold">Before you checkout</h2>
                 <div class="flex space-x-4 mt-4">
-                    <div class="flex flex-col items-center">
-                        <img src="https://www.bigbasket.com/media/uploads/p/xxl/40015993_11-uncle-chips-spicy-treat.jpg"
-                            alt="Product Image" class="h-24 rounded">
-                        <p class="text-sm text-center mt-2">Uncle Chipps Spicy Treat Flavour Potato Chips</p>
-                        <p class="text-xs text-gray-500">48 g</p>
-                        <button class="bg-green-700 text-white px-4 py-1 rounded mt-2">ADD</button>
-                        <p class="text-xs mt-2">₹20</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="https://m.media-amazon.com/images/I/61mQ-Q7HmCL._AC_UF1000,1000_QL80_.jpg"
-                            alt="Product Image" class="h-24 rounded">
-                        <p class="text-sm text-center mt-2">Coca-Cola Soft Drink (300 ml)</p>
-                        <p class="text-xs text-gray-500">300 ml</p>
-                        <button class="bg-green-700 text-white px-4 py-1 rounded mt-2">ADD</button>
-                        <p class="text-xs mt-2">₹40</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="https://www.dorita.se/media/catalog/product/9/0/900179-lay-s-saltet-potetgull-175g.jpg"
-                            alt="Product Image" class="h-24 rounded">
-                        <p class="text-sm text-center mt-2">Chheda's Golden Banana Chips (Rock Salt)</p>
-                        <p class="text-xs text-gray-500">170 g</p>
-                        <button class="bg-green-700 text-white px-4 py-1 rounded mt-2">ADD</button>
-                        <p class="text-xs mt-2">₹85</p>
-                        <p class="text-xs text-red-500">16% OFF</p>
-                    </div>
+                    <% resultArray.forEach(function(elem){ %>
+                        <div class="flex flex-col items-center w-40">
+                            <img src="data:image/jpg;base64,<%= elem.image.toString('base64') %>" alt="<%= elem.name %>"
+                                class="w-32 h-32 object-cover rounded-lg shadow-sm">
+                            <p class="text-sm text-center mt-2 font-semibold">
+                                <%= elem.name %>
+                            </p>
+                            <p class="text-xs text-gray-500 line-through">₹<%= elem.price ? Number(elem.price) + 20 : 'N/A' %></p>
+                            <p class="font-bold text-lg">₹<%= elem.price || 'N/A' %></p>
+                            <a href="#" class="add-to-cart-btn px-4 py-2 mt-2 bg-green-700 text-white rounded hover:bg-green-800" data-id="<%= elem._id %>">Add</a>
+                            <% if (elem.discount) { %>
+                                <p class="text-xs text-red-500"><%= elem.discount %>% OFF</p>
+                            <% } %>
+                        </div>
+                    <% }) %>
                 </div>
                 <div class="mt-4 text-center text-white bg-green-700 py-5 px-10 rounded-md">
                     <h1 class="text-xl font-semibold">Get FREE delivery</h1>
-                    <p class="text-xs">order products worth ₹199 </p>
-                    <button
-                        class="text-sm bg-zinc-200 text-black px-10 py-3 rounded-xl font-semibold capitalize mt-6">See
-                        all coupons</button>
+                    <p class="text-xs">order products worth ₹199</p>
+                    <button class="text-sm bg-zinc-200 text-black px-10 py-3 rounded-xl font-semibold capitalize mt-6">See all coupons</button>
                 </div>
             </div>
+            
 
             <!-- Bill Details -->
             <div class="bg-white p-4 rounded-lg shadow mb-4">
@@ -273,7 +262,40 @@
             console.error(error);
         });
 };
-a
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach event listener to the document or a parent container
+    document.body.addEventListener('click', async function(event) {
+        if (event.target.classList.contains('add-to-cart-btn')) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            const button = event.target;
+            const productId = button.dataset.id; // Get product ID from the data-id attribute
+
+            try {
+                const response = await fetch(`/cart/adds/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to add to cart');
+                }
+
+                // Update the button text to "Added"
+                button.textContent = 'Added';
+                button.classList.remove('bg-green-700', 'hover:bg-green-800');
+                button.classList.add('bg-gray-500', 'cursor-not-allowed');
+                button.disabled = true;
+                window.location.reload();
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    });
+});
         </script>
     </body>
 

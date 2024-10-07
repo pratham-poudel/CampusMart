@@ -103,7 +103,7 @@ router.get("/products", validateAdmin, async function (req, res) {
 router.get("/vieworders", validateAdmin, async function (req, res) {
     try {
         const orders = await orderModel.find({ status: { $ne: 'Completed' } }).populate('user').populate('products');
-        // console.log(orders);
+        console.log(orders);
         res.render('vieworders', { orders });  
     } catch (error) {
         console.error("Error fetching orders:", error);

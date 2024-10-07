@@ -89,6 +89,7 @@
     <!-- Navbar -->
     <nav class="bg-white shadow fixed w-full z-10 top-0 left-0">
         <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+            <!-- Profile Icon and User Info -->
             <div class="flex items-center">
                 <img src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
                     alt="Profile Icon" class="w-8 h-8 rounded-full mr-2">
@@ -101,13 +102,28 @@
                     </p>
                 </div>
             </div>
-            <a href="/cart"
-                class="px-6 py-3 bg-green-700 text-white rounded-lg flex items-center space-x-2 hover:bg-green-800">
-                <span class="text-lg">Cart</span>
-                <i class="text-2xl ri-arrow-right-s-fill"></i>
-            </a>
+    
+            <!-- Links for Log Out and Cart -->
+            <div class="flex items-center space-x-4">
+                <!-- Log Out Button (smaller padding and font-size on small screens) -->
+                <a href="/users/logout"
+                   class="px-4 py-2 bg-green-700 text-white rounded-lg flex items-center space-x-2 hover:bg-green-800
+                   text-base sm:text-lg sm:px-6 sm:py-3">
+                   <span>Log Out</span>
+                   <i class="text-lg sm:text-2xl ri-arrow-right-s-fill"></i>
+                </a>
+                
+                <!-- Cart Button (similar adjustments) -->
+                <a href="/cart"
+                   class="px-4 py-2 bg-green-700 text-white rounded-lg flex items-center space-x-2 hover:bg-green-800
+                   text-base sm:text-lg sm:px-6 sm:py-3">
+                   <span>Cart</span>
+                   <i class="text-lg sm:text-2xl ri-arrow-right-s-fill"></i>
+                </a>
+            </div>
         </div>
     </nav>
+    
 
     <!-- Add top padding to prevent content from being hidden under the fixed navbar -->
     <div class="pt-16 container mx-auto px-4 py-8">

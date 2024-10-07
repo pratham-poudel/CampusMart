@@ -21,26 +21,34 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
         .order-header h4 {
             margin: 0;
         }
-        .order-details {
+        .order-summary {
             margin-bottom: 20px;
+        }
+        .product-thumbnails {
+            display: flex;
+            gap: 5px;
+        }
+        .product-thumbnail {
+            max-width: 50px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .order-details {
+            display: none; /* Hidden initially */
+            margin-top: 15px;
         }
         .product-card {
             background-color: #f1f1f1;
             border-radius: 5px;
             margin-bottom: 10px;
             padding: 10px;
-        }
-        .product-image {
-            max-width: 100px;
-            border-radius: 5px;
+            display: flex;
         }
         .product-details {
-            flex: 1;
             margin-left: 15px;
         }
         .buttons {
@@ -65,33 +73,25 @@
 
     <% orders.forEach(function(order) { %>
         <div class="order-card">
+            <!-- Order Summary -->
             <div class="order-header">
                 <h4>Order ID: <%= order.orderId %></h4>
                 <span>Status: <%= order.status %></span>
             </div>
-            <div class="order-details">
+            <div class="order-summary">
                 <p><strong>User:</strong> <%= order.user.name %> (<%= order.user.email %>)</p>
-                <p><strong>Phone:</strong> <%= order.user.phone %></p>
-                <p><strong>Address:</strong> <%= order.address %></p>
                 <p><strong>Total Price:</strong> ₹<%= order.totalPrice %></p>
-                <p><strong>Order Date:</strong> <%= order.createdAt.toLocaleString() %></p>
-                <hr>
-                <h5>Products</h5>
-                <% order.products.forEach(function(product) { %>
-                    <div class="product-card d-flex">
-                        <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="Product Image" class="product-image">
-                        <div class="product-details">
-                            <p><strong>Name:</strong> <%= product.name %></p>
-                            <p><strong>Price:</strong> ₹<%= product.price %></p>
-                            <p><strong>Category:</strong> <%= product.category %></p>
-                            <p><strong>Stock:</strong> <%= product.stock %> left</p>
-                            <p><strong>Description:</strong> <%= product.description %></p>
-                        </div>
-                    </div>
-                <% }); %>
+                <!-- Thumbnails of Products -->
+                <div class="product-thumbnails">
+                    <% order.products.forEach(function(product) { %>
+                        <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="Product Image" class="product-thumbnail">
+                    <% }); %>
+                </div>
             </div>
-            <div class="buttons">
-                <button 
+
+            <!-- Expand/Collapse Button -->
+            <button class="btn btn-secondary btn-toggle-details" data-order-id="<%= order.orderId %>">View Details</button>
+            <button 
                     type="button" 
                     class="btn btn-primary btn-assign" 
                     data-order-id="<%= order.orderId %>" 
@@ -103,34 +103,54 @@
                 <form action="/order/cancel/<%= order.orderId %>" method="POST">
                     <button type="submit" class="btn btn-cancel">Cancel Order</button>
                 </form>
+            
+                
+               
+            
+
+            <!-- Order Details (Initially Hidden) -->
+            <div class="order-details" id="details-<%= order.orderId %>">
+                <p><strong>Phone:</strong> <%= order.user.phone %></p>
+                <p><strong>Address:</strong> <%= order.address %></p>
+                <p><strong>Order Date:</strong> <%= order.createdAt.toLocaleString() %></p>
+                <hr>
             </div>
-            
-            
         </div>
     <% }); %>
 
 </div>
 
 <script>
-
-document.querySelectorAll('.btn-assign').forEach(function(button) {
-    button.addEventListener('click', function() {
-        const orderId = button.getAttribute('data-order-id');
-        button.innerHTML = 'Assigning...';
-       fetch(`/order/assign/${orderId}`, {
-           method: 'POST'
-       }).then(function(response) {
-           
-           if(response.ok) {
-               button.innerHTML = 'Assigned';
-               button.disabled = true;
-           }}).catch(function(error) {
-               console.error(error);
-               button.innerHTML = 'Assign to Delivery Partner';});
+    // Toggle order details
+    document.querySelectorAll('.btn-toggle-details').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const orderId = button.getAttribute('data-order-id');
+            const detailsDiv = document.getElementById('details-' + orderId);
+            const isVisible = detailsDiv.style.display === 'block';
+            detailsDiv.style.display = isVisible ? 'none' : 'block';
+            button.textContent = isVisible ? 'View Details' : 'Hide Details';
+        });
     });
-});
 
-   
+    // Assign order to delivery partner
+    document.querySelectorAll('.btn-assign').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const orderId = button.getAttribute('data-order-id');
+            button.innerHTML = 'Assigning...';
+            fetch(`/order/assign/${orderId}`, {
+                method: 'POST'
+            }).then(function(response) {
+                if(response.ok) {
+                    button.innerHTML = 'Assigned';
+                    button.disabled = true;
+                }
+            }).catch(function(error) {
+                console.error(error);
+                button.innerHTML = 'Assign to Delivery Partner';
+            });
+        });
+    });
 </script>
+
 </body>
 </html>

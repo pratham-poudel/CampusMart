@@ -11,6 +11,12 @@ router.get('/', validateUserAuth, async function (req, res) {
     try {
         let id = await userModel.findOne({ email: req.user.email });
         let cart = await cartModel.findOne({ user: id._id }).populate('products');
+        const resultArray = await productModel.aggregate([
+            {
+                $sample: { size: 3 } // Randomly selects 3 products
+            }
+        ]);
+
         
         let cartDataStructure = {};
         if(cart.products){
@@ -34,7 +40,7 @@ router.get('/', validateUserAuth, async function (req, res) {
         }
        
 
-        res.render('cart',{cart:finalarray,finalprice:finalprice,userid:id._id,address:id.addresses[0].address});
+        res.render('cart',{cart:finalarray,finalprice:finalprice,userid:id._id,address:id.addresses[0].address,resultArray});
 
     } catch (error) {
         res.send(error.message);
