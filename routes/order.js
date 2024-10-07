@@ -5,7 +5,7 @@ const { orderModel } = require('../models/order');
 const { cartModel } = require('../models/cart');
 const Razorpay = require('razorpay');
 const { userModel } = require('../models/user');
-const deliveryPartnerModel = require('../models/deliverypartner');
+const deliveryPartnerModel = require('../models/deliveryPartner');
 const deliveryModel = require('../models/delivery');
 
 const validateUser = require('../middlewares/user');
