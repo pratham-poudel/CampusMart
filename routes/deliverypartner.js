@@ -1,5 +1,5 @@
 const express = require('express');
-const deliveryPartnerModel = require('../models/deliveryPartner');
+const deliveryPartnerModel = require('../models/dpp');
 const DeliveryModel = require('../models/delivery');
 const { orderModel } = require('../models/order');
 const router = express.Router();
