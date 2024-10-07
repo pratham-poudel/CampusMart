@@ -44,7 +44,6 @@ const deliveryPartnerSchema = new mongoose.Schema({
     }
 });
 
-// Check if the model is already compiled to avoid OverwriteModelError
-const DeliveryPartner = mongoose.models.DeliveryPartner || mongoose.model('DeliveryPartner', deliveryPartnerSchema);
+module.exports = mongoose.models.DeliveryPartner || mongoose.model('DeliveryPartner', deliveryPartnerSchema);
 
-module.exports = DeliveryPartner;
+
