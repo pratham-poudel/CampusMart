@@ -34,7 +34,7 @@ const deliveryPartnerSchema = new mongoose.Schema({
         type: String,
         default: 'active'
     },
-    assigned:{
+    assigned: {
         type: Boolean,
         default: false
     },
@@ -44,6 +44,7 @@ const deliveryPartnerSchema = new mongoose.Schema({
     }
 });
 
-const DeliveryPartner = mongoose.model('DeliveryPartner', deliveryPartnerSchema);
+// Check if the model is already compiled to avoid OverwriteModelError
+const DeliveryPartner = mongoose.models.DeliveryPartner || mongoose.model('DeliveryPartner', deliveryPartnerSchema);
 
 module.exports = DeliveryPartner;
