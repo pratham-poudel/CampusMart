@@ -63,7 +63,7 @@ router.post("/login", async function (req, res) {
 router.get("/dashboard", validateAdmin, async function (req, res) {
     const prodcount = await productModel.countDocuments();
     const categcount = await categoryModel.countDocuments();
-    const ordercount = await orderModel.countDocuments();
+    const ordercount = await orderModel.countDocuments({ status: { $ne: 'Completed' } });
 
     const email = req.user;
     res.render('admin_dashboard',{prodcount,categcount,ordercount});

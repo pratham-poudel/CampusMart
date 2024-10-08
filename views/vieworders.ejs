@@ -98,7 +98,7 @@
                     <% if (order.status !== 'Processing') { %> 
                         disabled 
                     <% } %>>
-                    Assigned to Delivery Partner
+                    Assign to Delivery Partner
                 </button>
                 <form action="/order/cancel/<%= order.orderId %>" method="POST">
                     <button type="submit" class="btn btn-cancel">Cancel Order</button>
