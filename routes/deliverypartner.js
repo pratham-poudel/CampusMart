@@ -1,5 +1,5 @@
 const express = require('express');
-const deliveryPartnerModel = require('../models/dpp');
+const deliveryPartner = require('../models/dpp');
 const DeliveryModel = require('../models/delivery');
 const { orderModel } = require('../models/order');
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get('/login', (req, res) => {
 });
 router.post('/register', async (req, res) => {
     try {
-        const deliveryPartner = new deliveryPartnerModel(req.body);
+        const deliveryPartner = new deliveryPartner(req.body);
         await deliveryPartner.save();
         const token = jwt.sign({ email: req.body.email }, process.env.TOKEN);
         res.cookie("deliverytoken", token);
