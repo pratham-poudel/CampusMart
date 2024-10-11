@@ -145,8 +145,8 @@
                 </div>
                 <nav class="hidden md:flex space-x-4">
                     <a class="nav-link" href="#">Home</a>
-                    <a class="nav-link" href="#">Products</a>
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="/products/viewproducts">Products</a>
+                    <a class="nav-link" href="/about">About</a>
                     <a class="nav-link" href="/deliverypartner/login">Delivery Partner</a>
                     <a class="nav-link" href="/admin/login">Admin Center</a>
                 </nav>
@@ -173,8 +173,8 @@
                     <h1 class="hero-title text-3xl md:text-5xl">Welcome to CampusMart</h1>
                     <p class="hero-subtitle text-lg md:text-xl">Your one-stop destination for all your shopping needs</p>
                     <div class="buttons">
-                        <button class="btn-shop">Shop Now</button>
-                        <button class="btn-learn">Learn More</button>
+                        <a href="/auth/google"><button class="btn-shop">Shop Now</button></a>
+                        <a  href="/about"><button class="btn-learn">Learn More</button></a>                                                 
                     </div>
                 </div>
             </section>
@@ -206,7 +206,7 @@
                 <p class="signup-subtitle text-yellow-100 text-lg">Sign up now and get 10% off your first purchase!</p>
                 <form class="signup-form">
                     <input type="email" placeholder="Enter your email" class="signup-input">
-                    <button class="btn-signup-now">Sign Up</button>
+                    <a href="/auth/google"><button class="btn-signup-now">Sign Up</button></a>
                 </form>
             </section>
         </main>

@@ -116,11 +116,16 @@
                         });
 
                         if (!response.ok) throw new Error('Failed to add to cart');
-
-                        button.textContent = 'Added';
+                        if(!response.redirected) {
+                            button.textContent = 'Added';
                         button.classList.add('bg-gray-500', 'cursor-not-allowed');
                         button.classList.remove('bg-green-700', 'hover:bg-green-800');
                         button.disabled = true;
+                        }else{
+                            window.location.href = '/auth/google';
+                        }
+
+                        
 
                     } catch (error) {
                         console.error('Error adding to cart:', error);

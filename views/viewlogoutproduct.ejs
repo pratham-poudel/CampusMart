@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Now | Your Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+        }
+
+        .carousel img {
+            flex-shrink: 0;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            scroll-snap-align: start;
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .carousel-indicators button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 5px;
+            border: none;
+        }
+
+        .carousel-indicators button.active {
+            background-color: #333;
+        }
+
+        /* Additional styles for the search bar and results */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .search-results {
+            display: none;
+            /* Hide by default */
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-results h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-results ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .search-results ul li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+   
+        <!-- Search Section -->
+        <div class="flex relative mt-4">
+            <input id="searchInput" type="text" placeholder="Search..."
+                class="px-4 py-2 w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600">
+        
+            <select id="searchOption" class="ml-2 px-2 py-2 rounded-lg border border-gray-300">
+                <option value="product">Search by Product</option>
+                <option value="store">Search by Store</option>
+            </select>
+        </div>
+
+        <section id="search-results" class="result bg-white p-6 rounded-lg shadow-md mb-8 hidden">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold">Search Results</h2>
+            </div>
+            <div id="search-results-list" class="flex  space-x-4 mt-4 overflow-x-auto">
+                <!-- Search results will be displayed here -->
+            </div>
+        </section>
+        
+
+
+        <!-- Order Now Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold">Order Now</h2>
+                <a href="/all-products" class="text-blue-500 hover:underline">See All</a>
+            </div>
+            <div class="flex space-x-4 mt-4 overflow-x-auto">
+                <% rnproducts.forEach(function(elem){ %>
+                    <div class="flex flex-col items-center w-40">
+                        <img src="data:image/jpg;base64,<%= elem.image.toString('base64') %>" alt="<%= elem.name %>"
+                            class="w-32 h-32 object-cover rounded-lg shadow-sm">
+                        <p class="text-sm text-center mt-2 font-semibold">
+                            <%= elem.name %>
+                        </p>
+                        <p class="text-xs text-gray-500 line-through">₹<%= elem.price ? Number(elem.price) + 20 : 'N/A'
+                                %>
+                        </p>
+                        <p class="font-bold text-lg">₹<%= elem.price || 'N/A' %>
+                        </p>
+                       
+
+                    </div>
+                    <% }) %>
+            </div>
+        </section>
+
+        <!-- Offers Section -->
+        <section class="my-10">
+            <div class="carousel">
+                <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=720/layout-engine/2023-07/Pet-Care_WEB.jpg"
+                    alt="Offer">
+                <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=720/layout-engine/2023-07/pharmacy-WEB.jpg"
+                    alt="Offer">
+                <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=720/layout-engine/2023-07/Pet-Care_WEB.jpg"
+                    alt="Offer">
+                <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=720/layout-engine/2023-07/Pet-Care_WEB.jpg"
+                    alt="Offer">
+                <img src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=720/layout-engine/2023-07/Pet-Care_WEB.jpg"
+                    alt="Offer">
+            </div>
+            <div class="carousel-indicators">
+                <button class="active"></button>
+                <button></button>
+                <button></button>
+                <button></button>
+                <button></button>
+            </div>
+        </section>
+
+        <!-- Grocery & Kitchen Section -->
+        <% for (let key in products) { %>
+            <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-xl font-semibold mb-4">
+                    <%= key %>
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <% products[key].forEach(elem=> { %>
+                        <div class="flex flex-col items-center">
+                            <img src="data:image/jpg;base64,<%= elem.image.toString('base64') %>" alt="<%= elem.name %>"
+                                class="w-32 h-32 object-cover rounded-lg shadow-sm">
+                            <p class="text-sm text-center mt-2 font-semibold">
+                                <%= elem.name %>
+                            </p>
+                            <p class="text-xs text-gray-500 line-through">₹<%= elem.price ? Number(elem.price) + 20
+                                    : 'N/A' %>
+                            </p>
+                            <p class="font-bold text-lg">₹<%= elem.price || 'N/A' %>
+                            </p>
+                            
+
+                        </div>
+                        <% }) %>
+                </div>
+            </section>
+            <% } %>
+
+                
+              
+
+
+    </div>
+    
+    <script>
+        
+        
+             document.addEventListener('DOMContentLoaded', function() {
+    
+
+    searchInput.addEventListener('input', async function() {
+        const searchTerm = searchInput.value.trim();
+
+        if (searchTerm === '') {
+            resultsContainer.classList.add('hidden');
+            resultsList.innerHTML = '';
+            return;
+        }
+
+        
+    });
+});
+
+        // JavaScript for the carousel indicators
+        document.querySelectorAll('.carousel-indicators button').forEach((button, index) => {
+            button.addEventListener('click', () => {
+                document.querySelector('.carousel').scrollTo({
+                    left: index * document.querySelector('.carousel').clientWidth,
+                    behavior: 'smooth'
+                });
+                document.querySelectorAll('.carousel-indicators button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+        function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const searchOption = document.getElementById('searchOption');
+    const resultsContainer = document.getElementById('search-results');
+    const resultsList = document.getElementById('search-results-list');
+
+    // Function to convert ArrayBuffer to Base64
+    function arrayBufferToBase64(buffer) {
+        let binary = '';
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+    // Function to perform search based on selected option
+    async function performSearch(searchTerm, searchType) {
+        if (searchTerm === '') {
+            resultsContainer.classList.add('hidden');
+            resultsList.innerHTML = '';
+            return;
+        }
+
+        const searchUrl = searchType === 'product' 
+            ? `/search?q=${encodeURIComponent(searchTerm)}`
+            : `/search-store?q=${encodeURIComponent(searchTerm)}`;
+
+        if(searchType === 'product'){
+            try {
+            const response = await fetch(searchUrl);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const results = await response.json();
+            let clutter = '';
+
+            resultsList.innerHTML = '';
+            if (results.length > 0) {
+                resultsContainer.classList.remove('hidden');
+
+                results.forEach(item => {
+                    const base64String = arrayBufferToBase64(item.image.data);
+                    const imgSrc = `data:image/jpg;base64,${base64String}`;
+
+                    clutter += `
+                    <div class="flex flex-col items-center w-40">
+                        <img src="${imgSrc}" alt="${item.name}" class="w-32 h-32 object-cover rounded-lg shadow-sm" />
+                        <p class="text-sm text-center mt-2 font-semibold">${item.name}</p>
+                        <p class="text-xs text-gray-500 line-through">₹${item.price ? Number(item.price) + 20 : 'N/A'}</p>
+                        <p class="font-bold text-lg">₹${item.price || 'N/A'}</p>
+                        <a href="#" class="add-to-cart-btn px-4 py-2 mt-2 bg-green-700 text-white rounded hover:bg-green-800" data-id="${item._id}">Add</a>
+                    </div>`;
+                });
+
+                resultsList.innerHTML = clutter;
+            } else {
+                resultsContainer.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Error fetching results:', error);
+        }
+        }else if(searchType=='store'){
+            try {
+            const response = await fetch(searchUrl);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const results = await response.json();
+            let clutter = '';
+            
+
+            resultsList.innerHTML = '';
+            if (results.length > 0) {
+                resultsContainer.classList.remove('hidden');
+
+                results.forEach(item => {
+                    const base64String = arrayBufferToBase64(item.image.data);
+                    const imgSrc = `data:image/jpg;base64,${base64String}`;
+                    console.log(item);
+                    clutter += `
+                    <div class="flex flex-col items-center w-40">
+                        <h1 class="text-lg font-bold text-center text-blue-600">${item.by.storename}</h1>
+                        <a href="/store/${item.by._id}" class="text-sm text-center mt-2 font-semibold text-blue-500">View Store</a>
+                        <img src="${imgSrc}" alt="${item.name}" class="w-32 h-32 object-cover rounded-lg shadow-sm" />
+                        <p class="text-sm text-center mt-2 font-semibold">${item.name}</p>
+                        <p class="text-xs text-gray-500 line-through">₹${item.price ? Number(item.price) + 20 : 'N/A'}</p>
+                        <p class="font-bold text-lg">₹${item.price || 'N/A'}</p>
+                        <a href="#" class="add-to-cart-btn px-4 py-2 mt-2 bg-green-700 text-white rounded hover:bg-green-800" data-id="${item._id}">Add</a>
+                    </div>`;
+                });
+
+                resultsList.innerHTML = clutter;
+            } else {
+                resultsContainer.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Error fetching results:', error);
+        }
+        }
+        
+        
+    }
+
+    // Event listener for search input
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.trim();
+        const searchType = searchOption.value;  // Check selected option dynamically
+        performSearch(searchTerm, searchType);
+    });
+
+    // Event listener for changing search option
+    searchOption.addEventListener('change', function() {
+        const searchTerm = searchInput.value.trim();
+        const searchType = searchOption.value;  // Check selected option dynamically
+        performSearch(searchTerm, searchType);
+    });
+});
+
+   
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach event listener to the document or a parent container
+    document.body.addEventListener('click', async function(event) {
+        if (event.target.classList.contains('add-to-cart-btn')) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            const button = event.target;
+            const productId = button.dataset.id; // Get product ID from the data-id attribute
+
+            try {
+                const response = await fetch(`/cart/adds/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to add to cart');
+                }
+
+                // Update the button text to "Added"
+                button.textContent = 'Added';
+                button.classList.remove('bg-green-700', 'hover:bg-green-800');
+                button.classList.add('bg-gray-500', 'cursor-not-allowed');
+                button.disabled = true;
+
+                // Optionally update the cart count or other UI elements
+                const cartCountDisplay = document.getElementById('cartCountDisplay');
+                 // Update the cart count and show the footer
+                 const { newCount } = await response.json();
+                 console.log(newCount) // Assuming the server returns the updated cart count
+                cartCountDisplay.textContent = `${newCount} Items Added`;
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    });
+});
+
+    </script>
+</body>
+
+</html>

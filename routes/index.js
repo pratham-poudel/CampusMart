@@ -98,6 +98,9 @@ router.get('/store/:id', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+router.get('/about',  (req, res) => {
+    res.render('about');
+});
 
 
 

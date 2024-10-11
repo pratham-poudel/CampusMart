@@ -48,6 +48,43 @@ router.get('/', validateUserAuth, async function (req, res) {
         res.send(error.message);
     }
 });
+router.get('/viewproducts',  async function (req, res) {
+    try {
+        const resultArray = await productModel.aggregate([
+            {
+                $group: {
+                    _id: "$category",
+                    products: {
+                        $push: "$$ROOT"
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    category: "$_id",
+                    products: { $slice: ["$products", 10] },
+                },
+            },
+            {
+                $sort: { category: 1 } // Sort categories alphabetically
+            }
+        ]);
+
+        
+
+        let rnproducts = await productModel.aggregate([{ $sample: { size: 3 } }]);
+
+        const resultObject = resultArray.reduce((acc, item) => {
+            acc[item.category] = item.products;
+            return acc;
+        }, {});
+        
+        res.render('viewlogoutproduct', { products: resultObject, rnproducts});
+    } catch (error) {
+        res.send(error.message);
+    }
+});
 
 router.post('/', validateAdmin, upload.single("image"), async function (req, res) {
     try {
