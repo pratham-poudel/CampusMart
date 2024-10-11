@@ -15,7 +15,7 @@ async function sendEmail(to, subject, html) {
   try {
     // Compose the email
     const mailOptions = {
-      from: 'kpoudel_be22@thapar.edu',
+      from: 'kpoudel_be21@thapar.edu',
       to: to,
       subject: subject,
       html: html,
