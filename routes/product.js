@@ -145,5 +145,54 @@ router.post('/delete', validateAdmin, async function (req, res) {
 
     }
 });
+router.get('/update/:id',async function (req, res) {
+    const product = await productModel.findById(req.params.id);
+    res.render('updateproduct',{product});
+});
+
+router.post('/update/:id', validateAdmin, upload.single("image"), async function (req, res) {
+    try {
+        // Get product ID from request parameters
+        const productId = req.params.id;
+
+        // Extract and validate product details
+        let { name, price, category, stock, description } = req.body;
+        let { error } = validateProduct({ name, price, category, stock, description });
+        if (error) return res.send(error.message);
+
+        // Check if the category exists and create it if it doesn't
+        let isCategory = await categoryModel.findOne({ name: category });
+        if (!isCategory) {
+            await categoryModel.create({ name: category });
+        }
+
+        // Find the existing product
+        const product = await productModel.findById(productId);
+        if (!product) {
+            return res.status(404).send('Product not found');
+        }
+
+        // Update product details
+        product.name = name;
+        product.price = price;
+        product.category = category;
+        product.stock = stock;
+        product.description = description;
+
+        // If a new image is uploaded, update the image buffer
+        if (req.file) {
+            product.image = req.file.buffer;
+        }
+
+        // Save the updated product
+        await product.save();
+
+        // Redirect back or to a specific route
+        res.redirect('/admin/products'); // Redirect to products list or wherever appropriate
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).send('Server Error');
+    }
+});
 
 module.exports = router; // Export the router

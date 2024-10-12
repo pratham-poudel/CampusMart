@@ -70,36 +70,42 @@ router.get("/dashboard", validateAdmin, async function (req, res) {
 });
 router.get("/products", validateAdmin, async function (req, res) {
     try {
-        const resultArray = await productModel.aggregate([
-            {
-                $group: {
-                    _id: "$category",
-                    products: {
-                        $push: "$$ROOT"
-                    },
-                },
-    
-            },
-            {
-                $project: {
-                    _id: 0,
-                    category: "$_id",
-                    products: { $slice: ["$products", 10] },
-                },
-            }
-        ]);
-        const resultObject = resultArray.reduce((acc, item) => {
-            acc[item.category] = item.products;
-            return acc;
-        },{});
-        res.render('admin_products', { products: resultObject });
-
-    } catch (error) {
-        res.send(error.message);
+        // Fetch admin and populate products
+        const admin = await adminModel.findOne({ email: req.user.email }).populate('products');
         
+        // If no products, render with an empty object
+        if (!admin || !admin.products || admin.products.length === 0) {
+            return res.render('admin_products', { products: {} });
+        }
+
+        // Aggregate products by category
+        const productsByCategory = admin.products.reduce((acc, product) => {
+            const category = product.category;
+            
+            // Initialize category if it doesn't exist
+            if (!acc[category]) {
+                acc[category] = [];
+            }
+            
+            // Push the product into its category group
+            acc[category].push(product);
+            
+            return acc;
+        }, {});
+
+        // Limit products to 10 per category
+        Object.keys(productsByCategory).forEach((category) => {
+            productsByCategory[category] = productsByCategory[category].slice(0, 10);
+        });
+
+        // Send the result as an object
+        res.render('admin_products', { products: productsByCategory });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).send('Server Error');
     }
-  
 });
+
 router.get("/vieworders", validateAdmin, async function (req, res) {
     try {
         const orders = await orderModel.find({ status: { $ne: 'Completed' } }).populate('user').populate('products');
