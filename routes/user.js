@@ -176,7 +176,7 @@ router.post('/verifyDetails', validateUserauth, async function (req, res) {
 router.get('/tracking',validateUserauth, async function (req, res) {
     const email = req.user.email;
     const user = await userModel.findOne({email});
-    const orders = await orderModel.find({ user: user._id }).populate('user').populate('products');
+    const orders = await orderModel.find({ user: user._id, status: { $ne: 'Completed' } }).populate('user').populate('products');
 
     res.render('trackorder', { orders });  
 });

@@ -229,6 +229,15 @@
                 <!-- Footer Section -->
 <div id="footer" class="fixed bottom-0 inset-x-0 bg-white p-4 shadow-lg flex justify-between items-center ">
     <div>
+        <% if (ongoing) { %>
+            <div class="flex items-center space-x-3 p-2 bg-blue-50 border border-blue-200 rounded-lg shadow-sm animate-fadeIn">
+                <div class="loader ease-linear rounded-full border-4 border-t-4 border-blue-400 h-6 w-6 animate-spin"></div>
+                <a href="/users/tracking" class="text-sm font-medium text-blue-600 hover:underline transition duration-300 ease-in-out hover:text-blue-800">
+                    🚚 Your order is on the way! Track Order
+                </a>
+            </div>
+            <% } %>
+            
         <p class="text-sm">Get FREE delivery</p>
         <p class="text-xs text-gray-500">Add products worth ₹199</p>
         <p class="text-sm" id="cartCountDisplay">

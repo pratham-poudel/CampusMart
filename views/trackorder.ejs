@@ -161,7 +161,7 @@
         // Function to fetch updated order status from backend
         async function fetchOrderUpdates() {
             try {
-                const response = await fetch('/users/trackOrder');
+                const response = await fetch('/users/tracking');
                 const data = await response.json();
                 const orderContainer = document.getElementById('order-container');
 

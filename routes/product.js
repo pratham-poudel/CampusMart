@@ -8,6 +8,7 @@ const { categoryModel, validateCategory } = require('../models/category');
 const {cartModel}=require('../models/cart');
 const {userModel}=require('../models/user');
 const {adminModel}=require('../models/admin');
+const {orderModel}=require('../models/order');
 router.get('/', validateUserAuth, async function (req, res) {
     try {
         let somethingInCart = false;
@@ -42,12 +43,23 @@ router.get('/', validateUserAuth, async function (req, res) {
             acc[item.category] = item.products;
             return acc;
         }, {});
-        
-        res.render('index', { products: resultObject, rnproducts, somethingInCart, cartCount: cart ? cart.products.length:0 ,users});
+
+        const ongoingOrders = await orderModel.find({ user: users._id, status: { $ne: 'Completed' } });
+        const ongoing = ongoingOrders.length > 0;
+
+        res.render('index', {
+            products: resultObject,
+            rnproducts,
+            somethingInCart,
+            cartCount: cart ? cart.products.length : 0,
+            users,
+            ongoing,
+        });
     } catch (error) {
         res.send(error.message);
     }
 });
+
 router.get('/viewproducts',  async function (req, res) {
     try {
         const resultArray = await productModel.aggregate([
